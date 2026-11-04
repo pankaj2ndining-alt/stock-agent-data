@@ -3,170 +3,199 @@
 <html lang="hi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NIFTY 50 Stock Agent Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NIFTY 50 Stock Agent</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#0b1020;color:#e8edf7;font-family:Arial,sans-serif}
-header{padding:22px 4%;background:#111a30;border-bottom:1px solid #293653}
+body{margin:0;background:#080e1c;color:#eaf0ff;font-family:Arial,sans-serif}
+header{padding:22px 4%;background:#111b31;border-bottom:1px solid #293a59}
 h1{margin:0;font-size:25px}
-.sub{color:#9aabc7;margin-top:7px;font-size:13px}
-main{padding:22px 4%;max-width:1500px;margin:auto}
-.status{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:20px;color:#aab8d0;font-size:13px}
-.dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:#22c55e;margin-right:6px}
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-bottom:22px}
-.card,.panel{background:#131d33;border:1px solid #263653;border-radius:12px;padding:17px}
-.card small{color:#91a2c0}
+.sub{color:#93a6c7;margin-top:8px;font-size:13px}
+main{max-width:1500px;margin:auto;padding:22px 4%}
+.status{display:flex;gap:18px;flex-wrap:wrap;color:#a8b8d2;font-size:13px;margin-bottom:18px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:13px;margin-bottom:18px}
+.card,.panel{background:#121e34;border:1px solid #293b5b;border-radius:12px;padding:17px}
+.card small{color:#93a6c7}
 .card strong{display:block;font-size:25px;margin-top:10px}
-h2{font-size:18px;margin:0 0 15px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-bottom:18px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:15px;margin-bottom:15px}
+h2{font-size:17px;margin:0 0 14px}
 table{width:100%;border-collapse:collapse;font-size:13px}
-th,td{padding:10px 7px;text-align:left;border-bottom:1px solid #263653;white-space:nowrap}
-th{color:#91a2c0;font-weight:600}
-.positive{color:#22c55e}
-.negative{color:#f87171}
+th,td{padding:10px 7px;border-bottom:1px solid #293b5b;text-align:left;white-space:nowrap}
+th{color:#94a8ca}
 .scroll{overflow-x:auto}
-.panel{margin-bottom:18px}
-#message{color:#fbbf24;font-size:13px;margin:10px 0}
-footer{padding:20px;text-align:center;color:#7586a3;font-size:12px}
+.green{color:#2ddc91}
+.red{color:#ff7777}
+.muted{color:#a8b8d2}
+#message{font-size:13px;margin-bottom:15px;color:#f7c76b}
+footer{text-align:center;padding:20px;color:#8092b2;font-size:12px}
 @media(max-width:600px){h1{font-size:20px}main{padding:15px 3%}}
 </style>
 </head>
 <body>
 <header>
 <h1>📊 NIFTY 50 STOCK AGENT</h1>
-<div class="sub">Market Scanner • Watchlist • Backtest Dashboard</div>
+<div class="sub">Advanced Market Scanner | Watchlist | Backtest</div>
 </header>
 
 <main>
 <div class="status">
-<span><span class="dot"></span>Dashboard Connected</span>
-<span id="updated">डेटा लोड हो रहा है...</span>
-<span id="marketStatus"></span>
+<span>🟢 Dashboard Connected</span>
+<span id="updated">Loading...</span>
+<span id="day"></span>
 </div>
 
-<div id="message">Market data लोड हो रहा है...</div>
+<div id="message">Market Data लोड हो रहा है...</div>
 
 <div class="cards">
-<div class="card"><small>कुल Stocks</small><strong id="stocks">—</strong></div>
+<div class="card"><small>Total Stocks</small><strong id="stocks">—</strong></div>
 <div class="card"><small>Market Status</small><strong id="market">—</strong></div>
 <div class="card"><small>Top Gainers</small><strong id="gainers">—</strong></div>
 <div class="card"><small>Top Losers</small><strong id="losers">—</strong></div>
-<div class="card"><small>Watchlist Stocks</small><strong id="watch">—</strong></div>
+<div class="card"><small>Watchlist</small><strong id="watch">—</strong></div>
 </div>
 
 <div class="grid">
 <section class="panel">
 <h2>🚀 Top Gainers</h2>
-<div class="scroll"><table><thead><tr><th>Stock</th><th>Price</th><th>Change %</th></tr></thead><tbody id="gainerRows"></tbody></table></div>
+<div class="scroll"><table>
+<thead><tr><th>Stock</th><th>Price</th><th>Change %</th></tr></thead>
+<tbody id="gainerRows"></tbody>
+</table></div>
 </section>
+
 <section class="panel">
 <h2>📉 Top Losers</h2>
-<div class="scroll"><table><thead><tr><th>Stock</th><th>Price</th><th>Change %</th></tr></thead><tbody id="loserRows"></tbody></table></div>
+<div class="scroll"><table>
+<thead><tr><th>Stock</th><th>Price</th><th>Change %</th></tr></thead>
+<tbody id="loserRows"></tbody>
+</table></div>
 </section>
 </div>
 
-<div class="panel">
+<section class="panel">
 <h2>💰 Top Value Stocks</h2>
-<div class="scroll"><table><thead><tr><th>Stock</th><th>Price</th><th>Volume</th><th>Value</th><th>Change %</th></tr></thead><tbody id="valueRows"></tbody></table></div>
-</div>
+<div class="scroll"><table>
+<thead><tr><th>Stock</th><th>Price</th><th>Volume</th><th>Turnover (Cr)</th><th>Change %</th></tr></thead>
+<tbody id="valueRows"></tbody>
+</table></div>
+</section>
 
-<div class="panel">
-<h2>👀 Watchlist</h2>
-<div class="scroll"><table><thead><tr><th>Stock</th><th>Price</th><th>Change %</th><th>Signal</th></tr></thead><tbody id="watchRows"></tbody></table></div>
-</div>
+<section class="panel">
+<h2>📊 All Live Stocks</h2>
+<div class="scroll"><table>
+<thead><tr><th>Stock</th><th>Price</th><th>Previous Close</th><th>Change %</th><th>Volume</th><th>Flow Ratio</th><th>Signal</th></tr></thead>
+<tbody id="allRows"></tbody>
+</table></div>
+</section>
+
+<section class="panel">
+<h2>👀 Watchlist Signals</h2>
+<div class="scroll"><table>
+<thead><tr><th>Stock</th><th>Side</th><th>Price</th><th>Move %</th><th>Score</th><th>Volume X</th><th>Signal Time</th></tr></thead>
+<tbody id="watchRows"></tbody>
+</table></div>
+</section>
 
 <div class="grid">
 <section class="panel">
 <h2>🧪 Backtest Summary</h2>
-<div id="backtest">डेटा उपलब्ध होने पर यहाँ दिखाई देगा।</div>
+<div id="backtest"></div>
 </section>
 <section class="panel">
-<h2>📅 7-Day Backtest</h2>
-<div class="scroll"><table><thead><tr><th>Date</th><th>Details</th></tr></thead><tbody id="daysRows"></tbody></table></div>
+<h2>📅 Backtest Days</h2>
+<div class="scroll"><table>
+<thead><tr><th>Date</th><th>Details</th></tr></thead>
+<tbody id="daysRows"></tbody>
+</table></div>
 </section>
 </div>
 </main>
 
-<footer>
-NIFTY 50 Stock Agent | Data आपके अपने Stock Agent से प्रकाशित होता है।
-</footer>
+<footer>NIFTY 50 Stock Agent | Data from your local Stock Agent</footer>
 
 <script>
-const number = v => {
-  if(v === null || v === undefined || v === "") return "—";
-  if(typeof v === "number") return v.toLocaleString("en-IN",{maximumFractionDigits:2});
-  return String(v);
-};
+const el=id=>document.getElementById(id);
+const fmt=v=>v===null||v===undefined||v===""?"—":
+(typeof v==="number"?v.toLocaleString("en-IN",{maximumFractionDigits:2}):String(v));
+const safe=v=>String(v??"—").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const cls=v=>Number(v)>=0?"green":"red";
 
-const pick = (obj, keys) => {
-  for(const k of keys) if(obj && obj[k] !== undefined && obj[k] !== null) return obj[k];
-  return null;
-};
+function tableRows(data,kind){
+ if(!Array.isArray(data)||!data.length)
+ return '<tr><td colspan="8">डेटा उपलब्ध नहीं है</td></tr>';
 
-const rows = (items, type) => {
-  if(!Array.isArray(items) || !items.length) return '<tr><td colspan="5">डेटा उपलब्ध नहीं है</td></tr>';
-  return items.map(x=>{
-    if(typeof x !== "object" || !x) return "";
-    const name = pick(x,["symbol","stock","name","trading_symbol"]) ?? "—";
-    const price = pick(x,["ltp","last_price","price","close"]);
-    const change = pick(x,["change_pct","change_percent","percent_change","pChange"]);
-    const volume = pick(x,["volume","vol"]);
-    const value = pick(x,["value","turnover","traded_value"]);
-    const signal = pick(x,["signal","action","side"]);
-    const cls = Number(change) >= 0 ? "positive" : "negative";
-    if(type==="value") return `<tr><td>${name}</td><td>${number(price)}</td><td>${number(volume)}</td><td>${number(value)}</td><td class="${cls}">${number(change)}</td></tr>`;
-    if(type==="watch") return `<tr><td>${name}</td><td>${number(price)}</td><td class="${cls}">${number(change)}</td><td>${signal ?? "—"}</td></tr>`;
-    return `<tr><td>${name}</td><td>${number(price)}</td><td class="${cls}">${number(change)}</td></tr>`;
-  }).join("");
-};
+ return data.map(x=>{
+  const s=safe(x.symbol);
+  const p=fmt(x.price);
+  const ch=fmt(x.move_pct);
+  const c=cls(x.move_pct);
+
+  if(kind==="value")
+   return `<tr><td>${s}</td><td>${p}</td><td>${fmt(x.volume)}</td><td>${fmt(x.turnover_cr)}</td><td class="${c}">${ch}%</td></tr>`;
+
+  if(kind==="all")
+   return `<tr><td>${s}</td><td>${p}</td><td>${fmt(x.prev_close)}</td><td class="${c}">${ch}%</td><td>${fmt(x.volume)}</td><td>${fmt(x.flow_ratio)}</td><td>${safe(x.side)}</td></tr>`;
+
+  return `<tr><td>${s}</td><td>${p}</td><td class="${c}">${ch}%</td></tr>`;
+ }).join("");
+}
 
 async function loadData(){
-  try{
-    const response = await fetch("./market-data.json?t="+Date.now(),{cache:"no-store"});
-    if(!response.ok) throw new Error("HTTP "+response.status);
-    const d = await response.json();
+ try{
+  const response=await fetch("./market-data.json?t="+Date.now(),{cache:"no-store"});
+  if(!response.ok)throw new Error("HTTP "+response.status);
 
-    document.getElementById("stocks").textContent = number(d.stocks);
-    document.getElementById("market").textContent = d.market_open ? "OPEN" : "CLOSED";
-    document.getElementById("gainers").textContent = Array.isArray(d.top_gainers) ? d.top_gainers.length : "—";
-    document.getElementById("losers").textContent = Array.isArray(d.top_losers) ? d.top_losers.length : "—";
-    document.getElementById("watch").textContent = d.watch?.stocks ? Object.keys(d.watch.stocks).length : "—";
+  const data=await response.json();
+  const live=data.live||{};
+  const watch=data.watch||{};
+  const summary=data.backtest_summary||{};
+  const days=data.backtest_7d||{};
 
-    document.getElementById("gainerRows").innerHTML = rows(d.top_gainers);
-    document.getElementById("loserRows").innerHTML = rows(d.top_losers);
-    document.getElementById("valueRows").innerHTML = rows(d.top_value,"value");
+  el("stocks").textContent=fmt(live.stocks);
+  el("market").textContent=live.market_open?"OPEN":"CLOSED";
+  el("gainers").textContent=(live.top_gainers||[]).length;
+  el("losers").textContent=(live.top_losers||[]).length;
+  el("watch").textContent=Object.keys(watch.stocks||{}).length;
 
-    const watch = d.watch?.stocks;
-    if(Array.isArray(watch)){
-      document.getElementById("watchRows").innerHTML = rows(watch,"watch");
-    }else if(watch && typeof watch==="object"){
-      document.getElementById("watchRows").innerHTML = rows(Object.entries(watch).map(([symbol,v])=>typeof v==="object"?{symbol,...v}:{symbol,signal:v}),"watch");
-    }else{
-      document.getElementById("watchRows").innerHTML = '<tr><td colspan="4">Watchlist डेटा उपलब्ध नहीं है</td></tr>';
-    }
+  el("gainerRows").innerHTML=tableRows(live.top_gainers);
+  el("loserRows").innerHTML=tableRows(live.top_losers);
+  el("valueRows").innerHTML=tableRows(live.top_value,"value");
+  el("allRows").innerHTML=tableRows(live.rows,"all");
 
-    const b = d.backtest_summary || {};
-    document.getElementById("backtest").innerHTML =
-      `<p>Sessions Tested: <b>${number(b.sessions_tested)}</b></p>
-       <p>Signals: <b>${number(b.signals)}</b></p>
-       <p>Hit Rate: <b>${number(b.hit_rate)}</b></p>
-       <p>One Side Rate: <b>${number(b.one_side_rate)}</b></p>
-       <p>Average MFE: <b>${number(b.avg_mfe_pct)}</b></p>
-       <p>Average MAE: <b>${number(b.avg_mae_pct)}</b></p>`;
+  const w=watch.stocks||{};
+  const watchList=Object.entries(w);
+  el("watchRows").innerHTML=watchList.length?watchList.map(([symbol,x])=>
+   `<tr>
+    <td>${safe(symbol)}</td>
+    <td class="${x.side==="UP"?"green":"red"}">${safe(x.side)}</td>
+    <td>${fmt(x.price)}</td>
+    <td class="${cls(x.move_pct)}">${fmt(x.move_pct)}%</td>
+    <td>${fmt(x.score)}</td>
+    <td>${fmt(x.vol_x)}</td>
+    <td>${safe(x.signal_time||x.first_ready)}</td>
+   </tr>`
+  ).join(""):'<tr><td colspan="7">Watchlist खाली है</td></tr>';
 
-    const days = d.backtest_7d || {};
-    document.getElementById("daysRows").innerHTML = Object.entries(days).map(([date,v])=>
-      `<tr><td>${date}</td><td>${typeof v==="object"?JSON.stringify(v):number(v)}</td></tr>`
-    ).join("") || '<tr><td colspan="2">डेटा उपलब्ध नहीं है</td></tr>';
+  el("backtest").innerHTML=`
+   <p>Sessions Tested: <b>${fmt(summary.sessions_tested)}</b></p>
+   <p>Signals: <b>${fmt(summary.signals)}</b></p>
+   <p>Hit Rate: <b>${fmt(summary.hit_rate)}</b></p>
+   <p>One Side Rate: <b>${fmt(summary.one_side_rate)}</b></p>
+   <p>Average MFE: <b>${fmt(summary.avg_mfe_pct)}</b></p>
+   <p>Average MAE: <b>${fmt(summary.avg_mae_pct)}</b></p>`;
 
-    document.getElementById("updated").textContent = "Last Updated: "+(d.updated_ist || d.updated || "—");
-    document.getElementById("marketStatus").textContent = "Day: "+(d.day || "—");
-    document.getElementById("message").textContent = "डेटा सफलतापूर्वक लोड हुआ।";
-  }catch(e){
-    document.getElementById("message").textContent = "डेटा लोड नहीं हुआ: "+e.message;
-  }
+  el("daysRows").innerHTML=Object.entries(days).map(([date,v])=>
+   `<tr><td>${safe(date)}</td><td>${safe(typeof v==="object"?JSON.stringify(v):v)}</td></tr>`
+  ).join("")||'<tr><td colspan="2">डेटा उपलब्ध नहीं है</td></tr>';
+
+  el("updated").textContent="Updated: "+(live.updated_ist||data.generated_at||"—");
+  el("day").textContent="Trading Day: "+(live.day||"—");
+  el("message").textContent="✅ सभी उपलब्ध डेटा सफलतापूर्वक लोड हो गए।";
+ }catch(error){
+  el("message").textContent="❌ डेटा लोड करने में गलती: "+error.message;
+ }
 }
+
 loadData();
 setInterval(loadData,60000);
 </script>
